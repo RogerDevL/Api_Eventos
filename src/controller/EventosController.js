@@ -93,7 +93,7 @@ const EventosController = {
             const eventoDelet = await Evento.findByPk(id);
 
 
-            if(eventoDelet == null){
+            if(eventoDelet === null){
                 return res.status(404).json({
                     msg:"Evento nao encontrado!"
                 })
