@@ -6,6 +6,7 @@ const ParticipantesController = {
     try {
       const { nome, email, eventoId } = req.body;
 
+      
       const partCriado = await Participante.create({ nome, email, eventoId });
 
       return res.status(200).json({
@@ -59,8 +60,15 @@ const ParticipantesController = {
 
   getOne: async (req, res) => {
     try {
-      const { id } = req.body;
+      const { id } = req.params;
       const listarUnico = await Participante.findByPk(id);
+
+
+      if(!listarUnico){
+        return res.status(404).json({
+          msg:"Participante inexistente."
+        })
+      }
 
       return res.status(200).json({
         msg: "Participante encontrado",
@@ -78,10 +86,10 @@ const ParticipantesController = {
       const { id } = req.params;
       const deletePart = await Participante.findByPk(id);
 
-      if (deletePart === null) {
-        return res.status().json({
-          msg: "Participante inexistente",
-        });
+      if(!deletePart){
+        return res.status(404).json({
+          msg:"Participante não existe."
+        })
       }
 
       deletePart.destroy();
@@ -101,14 +109,48 @@ const ParticipantesController = {
     try {
 
         const {id} = req.params;
-        const eventEspe = await Participante.findAll({
-            
-        })
+        if(!id){
+          return res.status(404).json({
+            msg:"Faltando parametro"
+          })
+        }
+          const parts = await Participante.findAll({
+                where:{
+                  eventoId: id
+                }
+           });
+
+          return res.status(200).json({
+            msg:"Participante encontrado.",
+            parts
+          })
         
     } catch (error) {
-        
+        return res.status(500).json({
+          msg:"Contate o Roger"
+        })
+    }
+  },
+
+  eventosParticipantes: async(req, res) =>{
+    try {
+      const { id } = req.params;
+      const participantes = await Participante.findAll({
+        where: { eventoId: id },
+      
+      });
+
+          return res.status(200).json({
+            msg:"Participante encontrado.",
+            participantes
+          })  
+    } catch (error) {
+      return res.status(500).json({
+        msg:"Contate o Roger"
+      })
     }
   }
+  
 };
 
 
