@@ -21,7 +21,7 @@ const ParticipantesController = {
   },
   update: async (req, res) => {
     try {
-      const { id } = req.body;
+      const { id } = req.params;
       const { nome, email, eventoId } = req.body;
 
       const participanteEdit = await Participante.findByPk(id);
@@ -32,10 +32,18 @@ const ParticipantesController = {
         });
       }
 
+      participanteEdit.nome = nome;
+      participanteEdit.email = email;
+      participanteEdit.eventoId = eventoId;
+
+      participanteEdit.save();
+
       return res.status(200).json({
-        msg: "Participante encontrado:",
+        msg: "Participante atualizado!",
         participanteEdit,
       });
+
+      
     } catch (error) {
       return res.status(500).json({
         msg: "contate o Roger",

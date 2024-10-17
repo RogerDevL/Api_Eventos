@@ -38,6 +38,11 @@ const EventosController = {
 
             eventoEdit.save();
 
+            return res.status(200).json({
+                msg:"Atualizado com sucesso!",
+                eventoEdit
+            });
+
 
 
         } catch (error) {

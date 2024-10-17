@@ -6,3 +6,4 @@ const sequelize = new Sequelize("eventos", "root", "root", {
 });
 
 module.exports = sequelize;
+
